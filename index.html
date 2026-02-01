@@ -4,108 +4,116 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <title>CapturaLead</title>
+    <title>Landing Pages & Automação para Negócios</title>
 
     <style>
         body {
             margin: 0;
-            font-family: system-ui, Arial;
-            background: #0f172a;
+            font-family: Arial, Helvetica, sans-serif;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        .box {
+        .container {
+            background: #111827;
+            padding: 40px;
+            border-radius: 16px;
             width: 100%;
-            max-width: 380px;
-            padding: 32px;
-            text-align: center;
+            max-width: 520px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
         }
 
         h1 {
-            font-size: 32px;
+            text-align: center;
             margin-bottom: 10px;
+            font-size: 26px;
         }
 
-        .subtitle {
-            font-size: 16px;
-            opacity: .8;
-            margin-bottom: 30px;
+        p {
+            text-align: center;
+            color: #cbd5e1;
+            margin-bottom: 25px;
+            font-size: 14px;
         }
 
         input {
             width: 100%;
             padding: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-radius: 8px;
             border: none;
+            background: #1f2937;
+            color: #fff;
             font-size: 14px;
         }
 
         button {
             width: 100%;
-            padding: 16px;
-            background: #22c55e;
+            padding: 15px;
             border: none;
-            border-radius: 10px;
+            border-radius: 8px;
+            background: #22c55e;
             font-weight: bold;
             font-size: 16px;
             cursor: pointer;
+            transition: .3s;
         }
 
         button:hover {
-            opacity: .9
+            transform: scale(1.03);
         }
 
-        .small {
-            font-size: 12px;
-            opacity: .6;
-            margin-top: 15px;
+        .services {
+            margin-bottom: 25px;
+            font-size: 13px;
+            color: #94a3b8;
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
 
-    <div class="box">
+        <h1>🚀 Transformo visitantes em clientes</h1>
 
-        <h1>🚀 CapturaLead</h1>
+        <p>
+            Crio Landing Pages profissionais, automatizo Instagram com ManyChat
+            e salvo todos os seus leads no Firebase em tempo real.
+        </p>
 
-        <div class="subtitle">
-            Receba clientes no Instagram<br>
-            todos os dias no automático.
+        <div class="services">
+            ✅ Landing Pages de alta conversão<br>
+            ✅ Automação Instagram / ManyChat<br>
+            ✅ Captura e organização de leads<br>
+            ✅ Firebase Realtime Database
         </div>
 
-        <form id="form">
-            <input id="nome" placeholder="Seu nome" required>
-            <input id="telefone" placeholder="WhatsApp" required>
-            <input id="instagram" placeholder="Instagram" required>
-            <input id="email" placeholder="Email" required>
+        <form id="leadForm">
+            <input type="text" id="nome" placeholder="Seu nome" required />
+            <input type="email" id="email" placeholder="Seu email" required />
+            <input type="tel" id="telefone" placeholder="Seu WhatsApp" required />
+            <input type="text" id="negocio" placeholder="Seu negócio/empresa" required />
 
-            <button type="submit">
-                Quero clientes agora
-            </button>
+            <button type="submit">Quero automatizar meu negócio 🔥</button>
         </form>
-
-        <div class="small">
-            Sem spam. Falo com você no WhatsApp.
-        </div>
 
     </div>
 
-    <!-- FIREBASE -->
+
+    <!-- Firebase + Script -->
     <script type="module">
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyC_FyYXoqHyZoz9HtIx2mLq6ttVyep35-I",
             authDomain: "capturalead-30100.firebaseapp.com",
+            databaseURL: "https://capturalead-30100-default-rtdb.firebaseio.com",
             projectId: "capturalead-30100",
             storageBucket: "capturalead-30100.firebasestorage.app",
             messagingSenderId: "824629681666",
@@ -113,30 +121,40 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = getDatabase(app);
+
+        const form = document.getElementById("leadForm");
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const data = {
-                nome: nome.value,
-                telefone: telefone.value,
-                instagram: instagram.value,
-                email: email.value,
-                createdAt: serverTimestamp()
-            };
+            const nome = document.getElementById("nome").value;
+            const email = document.getElementById("email").value;
+            const telefone = document.getElementById("telefone").value;
+            const negocio = document.getElementById("negocio").value;
 
-            await addDoc(collection(db, "leads"), data);
+            try {
 
-            const msg =
-                `Olá, sou ${data.nome}. Quero clientes no Instagram. Meu insta: ${data.instagram}`;
+                await push(ref(db, "leads"), {
+                    nome,
+                    email,
+                    telefone,
+                    negocio,
+                    data: new Date().toISOString()
+                });
 
-            window.location.href =
-                `https://wa.me/5531981216718?text=${encodeURIComponent(msg)}`;
+                const mensagem = `Olá! Me chamo ${nome} e quero uma landing page para meu negócio: ${negocio}`;
+
+                window.location.href =
+                    `https://wa.me/5531981216718?text=${encodeURIComponent(mensagem)}`;
+
+            } catch (err) {
+                alert("Erro ao enviar, tente novamente.");
+                console.error(err);
+            }
         });
 
     </script>
-
 </body>
 
 </html>
