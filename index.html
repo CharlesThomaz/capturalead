@@ -4,61 +4,109 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Landing Pages & Automação para Negócios</title>
+
+    <title>Landing Pages & Automação</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
         body {
             margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
             background: linear-gradient(135deg, #0f172a, #1e293b);
             color: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
-            background: #111827;
-            padding: 40px;
-            border-radius: 16px;
             width: 100%;
-            max-width: 520px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, .5);
+            max-width: 620px;
+            background: #0b1220;
+            padding: 45px;
+            border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .6);
+            text-align: center;
         }
 
         h1 {
-            text-align: center;
+            font-size: 36px;
             margin-bottom: 10px;
-            font-size: 26px;
+            line-height: 1.3;
         }
 
-        p {
-            text-align: center;
+        .highlight {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 18px;
             color: #cbd5e1;
+            margin-bottom: 30px;
+        }
+
+        .offers {
+            text-align: left;
+            font-size: 18px;
+            line-height: 1.9;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background: #22c55e;
+            color: #000;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-left: 6px;
+            font-size: 13px;
+        }
+
+        .pricing {
+            background: #111827;
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 25px;
-            font-size: 14px;
+            font-size: 18px;
+        }
+
+        .price-main {
+            font-size: 26px;
+            font-weight: bold;
+            color: #22c55e;
+        }
+
+        .price-maintenance {
+            font-size: 18px;
+            color: #facc15;
+            margin-top: 8px;
         }
 
         input {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             margin-bottom: 12px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: none;
+            font-size: 16px;
             background: #1f2937;
             color: #fff;
-            font-size: 14px;
         }
 
         button {
             width: 100%;
-            padding: 15px;
+            padding: 18px;
             border: none;
-            border-radius: 8px;
-            background: #22c55e;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: bold;
-            font-size: 16px;
+            background: #22c55e;
             cursor: pointer;
             transition: .3s;
         }
@@ -66,47 +114,54 @@
         button:hover {
             transform: scale(1.03);
         }
-
-        .services {
-            margin-bottom: 25px;
-            font-size: 13px;
-            color: #94a3b8;
-        }
     </style>
 </head>
 
 <body>
     <div class="container">
 
-        <h1>🚀 Transformo visitantes em clientes</h1>
+        <h1>
+            Landing Pages que <span class="highlight">geram clientes</span> todos os dias 🚀
+        </h1>
 
-        <p>
-            Crio Landing Pages profissionais, automatizo Instagram com ManyChat
-            e salvo todos os seus leads no Firebase em tempo real.
+        <p class="subtitle">
+            Automação + Leads + WhatsApp + Firebase em um só pacote
         </p>
 
-        <div class="services">
-            ✅ Landing Pages de alta conversão<br>
-            ✅ Automação Instagram / ManyChat<br>
-            ✅ Captura e organização de leads<br>
-            ✅ Firebase Realtime Database
+        <div class="offers">
+            ✅ Landing Page profissional de alta conversão<br>
+            ✅ Automação Instagram com ManyChat <span class="badge">GRÁTIS</span><br>
+            ✅ Leads salvos no Firebase <span class="badge">GRÁTIS</span><br>
+            ✅ Integração automática com WhatsApp<br>
+            ✅ Entrega rápida
+        </div>
+
+        <div class="pricing">
+            <div class="price-main">
+                Criação a partir de R$ 297
+            </div>
+
+            <div class="price-maintenance">
+                Manutenção mensal: R$ 49/mês
+                (hospedagem + banco de dados + suporte + atualizações)
+            </div>
         </div>
 
         <form id="leadForm">
-            <input type="text" id="nome" placeholder="Seu nome" required />
-            <input type="email" id="email" placeholder="Seu email" required />
-            <input type="tel" id="telefone" placeholder="Seu WhatsApp" required />
-            <input type="text" id="negocio" placeholder="Seu negócio/empresa" required />
+            <input type="text" id="nome" placeholder="Seu nome" required>
+            <input type="email" id="email" placeholder="Seu email" required>
+            <input type="tel" id="telefone" placeholder="Seu WhatsApp" required>
+            <input type="text" id="negocio" placeholder="Seu negócio" required>
 
-            <button type="submit">Quero automatizar meu negócio 🔥</button>
+            <button type="submit">
+                Quero começar agora 🔥
+            </button>
         </form>
 
     </div>
 
 
-    <!-- Firebase + Script -->
     <script type="module">
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -133,28 +188,19 @@
             const telefone = document.getElementById("telefone").value;
             const negocio = document.getElementById("negocio").value;
 
-            try {
+            await push(ref(db, "leads"), {
+                nome, email, telefone, negocio,
+                data: new Date().toISOString()
+            });
 
-                await push(ref(db, "leads"), {
-                    nome,
-                    email,
-                    telefone,
-                    negocio,
-                    data: new Date().toISOString()
-                });
+            const msg = `Olá! Me chamo ${nome} e quero uma landing page + automação para meu negócio: ${negocio}`;
 
-                const mensagem = `Olá! Me chamo ${nome} e quero uma landing page para meu negócio: ${negocio}`;
+            const url = `https://wa.me/5531981216718?text=${encodeURIComponent(msg)}`;
 
-                window.location.href =
-                    `https://wa.me/5531981216718?text=${encodeURIComponent(mensagem)}`;
-
-            } catch (err) {
-                alert("Erro ao enviar, tente novamente.");
-                console.error(err);
-            }
+            window.open(url, "_blank");
         });
-
     </script>
+
 </body>
 
 </html>
