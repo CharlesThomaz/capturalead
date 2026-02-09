@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel Profissional de Leads</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: #fff;
+            padding: 25px;
+        }
+
+        h1 {
+            text-align: center
+        }
+
+        .card {
+            background: #111827;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 420px;
+            margin: auto;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .green {
+            background: #22c55e;
+            color: white
+        }
+
+        .red {
+            background: #ef4444;
+            color: white
+        }
+
+        .blue {
+            background: #3b82f6;
+            color: white
+        }
+
+        .gray {
+            background: #374151;
+            color: white
+        }
+
+        .hidden {
+            display: none
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #111827;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #222;
+            font-size: 13px;
+        }
+
+        #erroMsg {
+            background: #7f1d1d;
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        #contador {
+            margin: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>📊 Painel de Leads</h1>
+
+    <!-- LOGIN -->
+    <div id="loginBox" class="card">
+        <input id="email" placeholder="Email">
+        <input id="senha" type="password" placeholder="Senha">
+        <button onclick="login()" class="green">Entrar</button>
+        <p id="erroMsg"></p>
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden">
+
+        <div class="toolbar">
+            <input id="search" placeholder="Buscar..." onkeyup="filtrar()">
+
+            <button class="blue" onclick="exportarCSV()">CSV</button>
+            <button class="gray" onclick="novoUsuario()">Novo Usuário</button>
+            <button class="red" onclick="logout()">Sair</button>
+        </div>
+
+        <div id="contador"></div>
+
+        <canvas id="grafico" height="90"></canvas>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Telefone</th>
+                    <th>Negócio</th>
+                    <th>Data</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="leadsTable"></tbody>
+        </table>
+
+        <div class="toolbar">
+            <button onclick="prev()">⬅</button>
+            <span id="pagina"></span>
+            <button onclick="next()">➡</button>
+        </div>
+
+    </div>
+
+
+
+    <script type="module">
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword }
+            from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+        /* ========= FIREBASE ========= */
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_FyYXoqHyZoz9HtIx2mLq6ttVyep35-I",
+            authDomain: "capturalead-30100.firebaseapp.com",
+            databaseURL: "https://capturalead-30100-default-rtdb.firebaseio.com",
+            projectId: "capturalead-30100",
+            storageBucket: "capturalead-30100.appspot.com",
+            appId: "1:824629681666:web:501eba900b80a3e3ae911b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const auth = getAuth(app);
+
+
+        /* ========= VARS ========= */
+        let leads = [];
+        let paginaAtual = 1;
+        const porPagina = 8;
+
+        const tabela = document.getElementById("leadsTable");
+        const contador = document.getElementById("contador");
+        const pagina = document.getElementById("pagina");
+        const erroMsg = document.getElementById("erroMsg");
+
+
+        /* ========= LOGIN ========= */
+        window.login = async () => {
+            try {
+                await signInWithEmailAndPassword(auth, email.value, senha.value);
+            } catch (e) {
+                erroMsg.innerText = "Email ou senha inválidos";
+            }
+        };
+
+        window.logout = () => signOut(auth);
+
+
+        /* ========= AUTH ========= */
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginBox.classList.add("hidden");
+                dashboard.classList.remove("hidden");
+                carregar();
+            } else {
+                loginBox.classList.remove("hidden");
+                dashboard.classList.add("hidden");
+            }
+        });
+
+
+        /* ========= CARREGAR ========= */
+        function carregar() {
+            onValue(ref(db, "leads"), snap => {
+                leads = [];
+                snap.forEach(c => {
+                    leads.push({ id: c.key, ...c.val() });
+                });
+                render();
+                grafico();
+            });
+        }
+
+
+        /* ========= RENDER ========= */
+        function render() {
+
+            const inicio = (paginaAtual - 1) * porPagina;
+            const fim = inicio + porPagina;
+            const lista = leads.slice(inicio, fim);
+
+            tabela.innerHTML = "";
+
+            lista.forEach(l => {
+                tabela.innerHTML += `
+<tr>
+<td>${l.nome}</td>
+<td>${l.email}</td>
+<td>${l.telefone}</td>
+<td>${l.negocio}</td>
+<td>${new Date(l.data).toLocaleDateString()}</td>
+<td>
+<button onclick="copiar('${l.telefone}')">📋</button>
+<button onclick="editar('${l.id}','${l.nome}')">✏️</button>
+<button onclick="deletar('${l.id}')" class="red">X</button>
+</td>
+</tr>`;
+            });
+
+            contador.innerText = "Total: " + leads.length + " leads";
+            pagina.innerText = "Página " + paginaAtual;
+        }
+
+
+        /* ========= AÇÕES ========= */
+        window.copiar = (tel) => {
+            navigator.clipboard.writeText(tel);
+            alert("Telefone copiado");
+        };
+
+        window.deletar = (id) => {
+            if (confirm("Excluir?"))
+                remove(ref(db, "leads/" + id));
+        };
+
+        window.editar = (id, nome) => {
+            const novo = prompt("Novo nome:", nome);
+            if (novo)
+                update(ref(db, "leads/" + id), { nome: novo });
+        };
+
+        window.filtrar = () => {
+            const t = search.value.toLowerCase();
+            const filtrado = leads.filter(l => l.nome.toLowerCase().includes(t));
+            tabela.innerHTML = "";
+            filtrado.forEach(l => {
+                tabela.innerHTML += `<tr><td>${l.nome}</td><td>${l.email}</td><td>${l.telefone}</td><td>${l.negocio}</td><td>${new Date(l.data).toLocaleDateString()}</td></tr>`;
+            });
+        };
+
+
+        /* ========= PAGINAÇÃO ========= */
+        window.next = () => { if (paginaAtual * porPagina < leads.length) { paginaAtual++; render(); } };
+        window.prev = () => { if (paginaAtual > 1) { paginaAtual--; render(); } };
+
+
+        /* ========= CSV ========= */
+        window.exportarCSV = () => {
+            let csv = "Nome,Email,Telefone,Negocio\n";
+            leads.forEach(l => csv += `${l.nome},${l.email},${l.telefone},${l.negocio}\n`);
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(new Blob([csv]));
+            a.download = "leads.csv";
+            a.click();
+        };
+
+
+        /* ========= NOVO USUÁRIO ========= */
+        window.novoUsuario = async () => {
+            const e = prompt("Email:");
+            const s = prompt("Senha:");
+            if (e && s)
+                await createUserWithEmailAndPassword(auth, e, s);
+        };
+
+
+        /* ========= GRÁFICO ========= */
+        function grafico() {
+
+            const dias = {};
+
+            leads.forEach(l => {
+                const d = new Date(l.data).toLocaleDateString();
+                dias[d] = (dias[d] || 0) + 1;
+            });
+
+            new Chart(graficoCanvas, {
+                type: "bar",
+                data: {
+                    labels: Object.keys(dias),
+                    datasets: [{ data: Object.values(dias) }]
+                }
+            });
+        }
+
+        const graficoCanvas = document.getElementById("grafico");
+
+    </script>
+
+</body>
+
+</html>

@@ -32,6 +32,26 @@
             border-radius: 18px;
             box-shadow: 0 25px 60px rgba(0, 0, 0, .6);
             text-align: center;
+            position: relative;
+        }
+
+        /* ===== BOTÃO DASHBOARD ===== */
+        .admin-link {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 13px;
+            color: #94a3b8;
+            text-decoration: none;
+            background: #1f2937;
+            padding: 6px 10px;
+            border-radius: 8px;
+            transition: .2s;
+        }
+
+        .admin-link:hover {
+            background: #334155;
+            color: white;
         }
 
         h1 {
@@ -114,11 +134,23 @@
         button:hover {
             transform: scale(1.03);
         }
+
+        .msg {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #22c55e;
+        }
     </style>
 </head>
 
 <body>
+
     <div class="container">
+
+        <!-- 🔐 BOTÃO ADMIN -->
+        <a href="dashboard.html" class="admin-link">
+            📊 Ver Painel
+        </a>
 
         <h1>
             Landing Pages que <span class="highlight">geram clientes</span> todos os dias 🚀
@@ -143,7 +175,7 @@
 
             <div class="price-maintenance">
                 Manutenção mensal: R$ 49/mês
-                (hospedagem + banco de dados + suporte + atualizações)
+                (hospedagem + banco + suporte + atualizações)
             </div>
         </div>
 
@@ -156,12 +188,15 @@
             <button type="submit">
                 Quero começar agora 🔥
             </button>
+
+            <p id="msg" class="msg"></p>
         </form>
 
     </div>
 
 
     <script type="module">
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
@@ -170,8 +205,7 @@
             authDomain: "capturalead-30100.firebaseapp.com",
             databaseURL: "https://capturalead-30100-default-rtdb.firebaseio.com",
             projectId: "capturalead-30100",
-            storageBucket: "capturalead-30100.firebasestorage.app",
-            messagingSenderId: "824629681666",
+            storageBucket: "capturalead-30100.appspot.com",
             appId: "1:824629681666:web:501eba900b80a3e3ae911b"
         };
 
@@ -179,26 +213,43 @@
         const db = getDatabase(app);
 
         const form = document.getElementById("leadForm");
+        const msgEl = document.getElementById("msg");
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const nome = document.getElementById("nome").value;
-            const email = document.getElementById("email").value;
-            const telefone = document.getElementById("telefone").value;
-            const negocio = document.getElementById("negocio").value;
+            const nome = nomeInput.value;
+            const email = emailInput.value;
+            const telefone = telefoneInput.value;
+            const negocio = negocioInput.value;
+
+            msgEl.innerText = "Salvando...";
 
             await push(ref(db, "leads"), {
-                nome, email, telefone, negocio,
+                nome,
+                email,
+                telefone,
+                negocio,
                 data: new Date().toISOString()
             });
 
-            const msg = `Olá! Me chamo ${nome} e quero uma landing page + automação para meu negócio: ${negocio}`;
+            msgEl.innerText = "Redirecionando para o WhatsApp...";
 
-            const url = `https://wa.me/5531981216718?text=${encodeURIComponent(msg)}`;
+            const texto = `Olá! Me chamo ${nome} e quero uma landing page + automação para meu negócio: ${negocio}`;
 
-            window.open(url, "_blank");
+            window.open(
+                `https://wa.me/5531981216718?text=${encodeURIComponent(texto)}`,
+                "_blank"
+            );
+
+            form.reset();
         });
+
+        const nomeInput = document.getElementById("nome");
+        const emailInput = document.getElementById("email");
+        const telefoneInput = document.getElementById("telefone");
+        const negocioInput = document.getElementById("negocio");
+
     </script>
 
 </body>
