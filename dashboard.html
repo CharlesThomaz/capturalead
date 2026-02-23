@@ -1,170 +1,605 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel Profissional de Leads</title>
-
+    <title>Dashboard · Gestão de Leads</title>
+    
+    <!-- Fontes e ícones -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial;
-            background: #0f172a;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0f1e, #0f172a);
             color: #fff;
+            min-height: 100vh;
             padding: 25px;
+            line-height: 1.5;
+            opacity: 0;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #22c55e;
         }
 
         h1 {
-            text-align: center
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .card {
-            background: #111827;
-            padding: 20px;
-            border-radius: 12px;
+        h1 i {
+            color: #22c55e;
+            font-size: 32px;
+        }
+
+        /* Cards e containers */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        /* Login Box */
+        #loginBox {
             max-width: 420px;
-            margin: auto;
+            margin: 40px auto;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .login-header i {
+            font-size: 48px;
+            color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            padding: 15px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .login-header h2 {
+            font-weight: 500;
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #475569;
+            font-size: 18px;
         }
 
         input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border: none;
+            padding: 16px 16px 16px 45px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 15px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            transition: all 0.3s ease;
         }
 
-        button {
-            padding: 8px 12px;
-            border-radius: 8px;
+        input:focus {
+            outline: none;
+            border-color: #22c55e;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        input::placeholder {
+            color: #475569;
+        }
+
+        /* Botões */
+        .btn {
+            padding: 14px 24px;
+            border-radius: 14px;
             border: none;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .green {
-            background: #22c55e;
-            color: white
+        .btn:hover {
+            transform: translateY(-2px);
         }
 
-        .red {
-            background: #ef4444;
-            color: white
+        .btn-green {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            box-shadow: 0 10px 20px -10px rgba(34, 197, 94, 0.5);
         }
 
-        .blue {
-            background: #3b82f6;
-            color: white
+        .btn-green:hover {
+            box-shadow: 0 15px 25px -10px #22c55e;
         }
 
-        .gray {
-            background: #374151;
-            color: white
+        .btn-blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border: none;
+            box-shadow: 0 10px 20px -10px rgba(59, 130, 246, 0.5);
         }
 
-        .hidden {
-            display: none
+        .btn-red {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
         }
 
+        .btn-gray {
+            background: rgba(55, 65, 81, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Dashboard */
+        #dashboard {
+            animation: fadeIn 0.6s ease;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: #22c55e;
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: rgba(34, 197, 94, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #22c55e;
+        }
+
+        .stat-info h3 {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* Toolbar */
         .toolbar {
             display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
+            gap: 12px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
+            align-items: center;
+            background: rgba(17, 24, 39, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+            min-width: 250px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #475569;
+        }
+
+        .search-box input {
+            padding-left: 45px;
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        /* Gráfico */
+        .chart-container {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        canvas {
+            max-height: 200px;
+            width: 100% !important;
+        }
+
+        /* Tabela */
+        .table-container {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 20px;
+            overflow-x: auto;
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            background: #111827;
-            margin-top: 10px;
+            font-size: 14px;
         }
 
-        th,
+        th {
+            text-align: left;
+            padding: 16px 12px;
+            color: #94a3b8;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         td {
-            padding: 8px;
-            border-bottom: 1px solid #222;
-            font-size: 13px;
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #e2e8f0;
         }
 
-        #erroMsg {
-            background: #7f1d1d;
-            padding: 8px;
-            border-radius: 8px;
-            margin-top: 10px;
+        tr:hover td {
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .action-btn.copy:hover {
+            background: #3b82f6;
+            border-color: #3b82f6;
+        }
+
+        .action-btn.edit:hover {
+            background: #22c55e;
+            border-color: #22c55e;
+        }
+
+        .action-btn.delete:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+        }
+
+        /* Paginação */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .pagination span {
+            background: rgba(34, 197, 94, 0.1);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            color: #22c55e;
+        }
+
+        /* Loading */
+        .loading {
             text-align: center;
+            padding: 40px;
+            color: #94a3b8;
         }
 
-        #contador {
-            margin: 10px 0;
-            font-weight: bold;
+        .loading i {
+            font-size: 32px;
+            color: #22c55e;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Mensagem de erro */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Badges */
+        .badge {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
         }
     </style>
 </head>
 
 <body>
-
-    <h1>📊 Painel de Leads</h1>
+    <h1>
+        <i class="fas fa-chart-line"></i>
+        Dashboard de Leads
+        <span class="badge">Admin</span>
+    </h1>
 
     <!-- LOGIN -->
-    <div id="loginBox" class="card">
-        <input id="email" placeholder="Email">
-        <input id="senha" type="password" placeholder="Senha">
-        <button onclick="login()" class="green">Entrar</button>
-        <p id="erroMsg"></p>
+    <div id="loginBox" class="glass-card">
+        <div class="login-header">
+            <i class="fas fa-lock"></i>
+            <h2>Acesso restrito · Área administrativa</h2>
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-envelope"></i>
+            <input id="email" type="email" placeholder="Seu email" value="admin@email.com">
+        </div>
+        
+        <div class="input-group">
+            <i class="fas fa-key"></i>
+            <input id="senha" type="password" placeholder="Sua senha">
+        </div>
+        
+        <button onclick="login()" class="btn btn-green" style="width: 100%;">
+            <i class="fas fa-sign-in-alt"></i>
+            Entrar no Dashboard
+        </button>
+        
+        <div id="erroMsg" class="error-message hidden"></div>
     </div>
-
 
     <!-- DASHBOARD -->
     <div id="dashboard" class="hidden">
-
-        <div class="toolbar">
-            <input id="search" placeholder="Buscar..." onkeyup="filtrar()">
-
-            <button class="blue" onclick="exportarCSV()">CSV</button>
-            <button class="gray" onclick="novoUsuario()">Novo Usuário</button>
-            <button class="red" onclick="logout()">Sair</button>
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Total de Leads</h3>
+                    <p id="totalLeads">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-calendar-week"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Esta semana</h3>
+                    <p id="leadsSemana">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Média/dia</h3>
+                    <p id="mediaDia">0</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-whatsapp"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>Conversões</h3>
+                    <p id="conversoes">87%</p>
+                </div>
+            </div>
         </div>
 
-        <div id="contador"></div>
-
-        <canvas id="grafico" height="90"></canvas>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Negócio</th>
-                    <th>Data</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="leadsTable"></tbody>
-        </table>
-
+        <!-- Toolbar -->
         <div class="toolbar">
-            <button onclick="prev()">⬅</button>
-            <span id="pagina"></span>
-            <button onclick="next()">➡</button>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input id="search" placeholder="Buscar por nome, email ou negócio..." onkeyup="filtrar()">
+            </div>
+
+            <button class="btn btn-blue" onclick="exportarCSV()">
+                <i class="fas fa-download"></i> CSV
+            </button>
+            
+            <button class="btn btn-gray" onclick="novoUsuario()">
+                <i class="fas fa-user-plus"></i> Novo Admin
+            </button>
+            
+            <button class="btn btn-red" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
         </div>
 
+        <!-- Gráfico -->
+        <div class="chart-container">
+            <canvas id="grafico"></canvas>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Negócio</th>
+                        <th>Data</th>
+                        <th style="text-align: center;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="leadsTable"></tbody>
+            </table>
+            
+            <div id="loadingLeads" class="loading">
+                <i class="fas fa-spinner"></i>
+                <p>Carregando leads...</p>
+            </div>
+        </div>
+
+        <!-- Paginação -->
+        <div class="pagination">
+            <button onclick="prev()" class="btn btn-gray" id="prevBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            
+            <span id="pagina">Página 1</span>
+            
+            <button onclick="next()" class="btn btn-gray" id="nextBtn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 
-
-
     <script type="module">
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut, createUserWithEmailAndPassword }
             from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
-        /* ========= FIREBASE ========= */
+        // Config Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyC_FyYXoqHyZoz9HtIx2mLq6ttVyep35-I",
             authDomain: "capturalead-30100.firebaseapp.com",
@@ -174,165 +609,385 @@
             appId: "1:824629681666:web:501eba900b80a3e3ae911b"
         };
 
+        // Init Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const auth = getAuth(app);
 
+        // Elementos DOM
+        const loginBox = document.getElementById("loginBox");
+        const dashboard = document.getElementById("dashboard");
+        const email = document.getElementById("email");
+        const senha = document.getElementById("senha");
+        const erroMsg = document.getElementById("erroMsg");
+        const tabela = document.getElementById("leadsTable");
+        const paginaSpan = document.getElementById("pagina");
+        const loadingLeads = document.getElementById("loadingLeads");
+        const totalLeadsSpan = document.getElementById("totalLeads");
+        const leadsSemanaSpan = document.getElementById("leadsSemana");
+        const mediaDiaSpan = document.getElementById("mediaDia");
 
-        /* ========= VARS ========= */
+        // Variáveis
         let leads = [];
         let paginaAtual = 1;
         const porPagina = 8;
+        let chartInstance = null;
 
-        const tabela = document.getElementById("leadsTable");
-        const contador = document.getElementById("contador");
-        const pagina = document.getElementById("pagina");
-        const erroMsg = document.getElementById("erroMsg");
-
-
-        /* ========= LOGIN ========= */
+        // ========= LOGIN =========
         window.login = async () => {
             try {
+                erroMsg.classList.add("hidden");
                 await signInWithEmailAndPassword(auth, email.value, senha.value);
             } catch (e) {
-                erroMsg.innerText = "Email ou senha inválidos";
+                erroMsg.classList.remove("hidden");
+                erroMsg.innerText = "❌ Email ou senha inválidos";
             }
         };
 
         window.logout = () => signOut(auth);
 
-
-        /* ========= AUTH ========= */
+        // ========= AUTH STATE =========
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 loginBox.classList.add("hidden");
                 dashboard.classList.remove("hidden");
-                carregar();
+                carregarLeads();
             } else {
                 loginBox.classList.remove("hidden");
                 dashboard.classList.add("hidden");
             }
         });
 
-
-        /* ========= CARREGAR ========= */
-        function carregar() {
-            onValue(ref(db, "leads"), snap => {
+        // ========= CARREGAR LEADS =========
+        function carregarLeads() {
+            loadingLeads.style.display = "block";
+            
+            onValue(ref(db, "leads"), (snap) => {
                 leads = [];
-                snap.forEach(c => {
-                    leads.push({ id: c.key, ...c.val() });
+                snap.forEach(child => {
+                    leads.push({ 
+                        id: child.key, 
+                        ...child.val() 
+                    });
                 });
-                render();
-                grafico();
+                
+                // Ordenar por data (mais recente primeiro)
+                leads.sort((a, b) => new Date(b.data) - new Date(a.data));
+                
+                loadingLeads.style.display = "none";
+                atualizarStats();
+                renderTabela();
+                renderGrafico();
             });
         }
 
+        // ========= ATUALIZAR STATS =========
+        function atualizarStats() {
+            totalLeadsSpan.innerText = leads.length;
+            
+            // Leads esta semana
+            const hoje = new Date();
+            const inicioSemana = new Date(hoje);
+            inicioSemana.setDate(hoje.getDate() - hoje.getDay());
+            
+            const leadsSemana = leads.filter(l => {
+                const dataLead = new Date(l.data);
+                return dataLead >= inicioSemana;
+            }).length;
+            
+            leadsSemanaSpan.innerText = leadsSemana;
+            
+            // Média por dia (últimos 30 dias)
+            const trintaDiasAtras = new Date();
+            trintaDiasAtras.setDate(trintaDiasAtras.getDate() - 30);
+            
+            const leads30dias = leads.filter(l => {
+                const dataLead = new Date(l.data);
+                return dataLead >= trintaDiasAtras;
+            }).length;
+            
+            const media = (leads30dias / 30).toFixed(1);
+            mediaDiaSpan.innerText = media;
+        }
 
-        /* ========= RENDER ========= */
-        function render() {
-
+        // ========= RENDER TABELA =========
+        function renderTabela() {
             const inicio = (paginaAtual - 1) * porPagina;
             const fim = inicio + porPagina;
             const lista = leads.slice(inicio, fim);
 
-            tabela.innerHTML = "";
+            if (lista.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px; color: #666;">Nenhum lead encontrado</td></tr>`;
+            } else {
+                tabela.innerHTML = lista.map(l => `
+                    <tr>
+                        <td><strong>${l.nome || '---'}</strong></td>
+                        <td>${l.email || '---'}</td>
+                        <td>${l.telefone || '---'}</td>
+                        <td>${l.negocio || '---'}</td>
+                        <td>${l.data ? new Date(l.data).toLocaleDateString('pt-BR') : '---'}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn copy" onclick="copiar('${l.telefone}')" title="Copiar telefone">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="action-btn edit" onclick="editar('${l.id}', '${l.nome}')" title="Editar nome">
+                                    <i class="fas fa-pen"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deletar('${l.id}')" title="Excluir">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
 
-            lista.forEach(l => {
-                tabela.innerHTML += `
-<tr>
-<td>${l.nome}</td>
-<td>${l.email}</td>
-<td>${l.telefone}</td>
-<td>${l.negocio}</td>
-<td>${new Date(l.data).toLocaleDateString()}</td>
-<td>
-<button onclick="copiar('${l.telefone}')">📋</button>
-<button onclick="editar('${l.id}','${l.nome}')">✏️</button>
-<button onclick="deletar('${l.id}')" class="red">X</button>
-</td>
-</tr>`;
-            });
-
-            contador.innerText = "Total: " + leads.length + " leads";
-            pagina.innerText = "Página " + paginaAtual;
+            paginaSpan.innerText = `Página ${paginaAtual} de ${Math.ceil(leads.length / porPagina) || 1}`;
+            
+            // Atualizar botões de paginação
+            document.getElementById('prevBtn').disabled = paginaAtual === 1;
+            document.getElementById('nextBtn').disabled = paginaAtual >= Math.ceil(leads.length / porPagina);
         }
 
-
-        /* ========= AÇÕES ========= */
+        // ========= AÇÕES =========
         window.copiar = (tel) => {
             navigator.clipboard.writeText(tel);
-            alert("Telefone copiado");
+            mostrarNotificacao("📋 Telefone copiado!", "success");
         };
 
         window.deletar = (id) => {
-            if (confirm("Excluir?"))
-                remove(ref(db, "leads/" + id));
+            if (confirm("Tem certeza que deseja excluir este lead?")) {
+                remove(ref(db, "leads/" + id))
+                    .then(() => mostrarNotificacao("✅ Lead excluído!", "success"))
+                    .catch(() => mostrarNotificacao("❌ Erro ao excluir", "error"));
+            }
         };
 
         window.editar = (id, nome) => {
-            const novo = prompt("Novo nome:", nome);
-            if (novo)
-                update(ref(db, "leads/" + id), { nome: novo });
+            const novo = prompt("Editar nome do lead:", nome);
+            if (novo && novo !== nome) {
+                update(ref(db, "leads/" + id), { nome: novo })
+                    .then(() => mostrarNotificacao("✅ Nome atualizado!", "success"))
+                    .catch(() => mostrarNotificacao("❌ Erro ao atualizar", "error"));
+            }
         };
 
+        // ========= FILTRO =========
         window.filtrar = () => {
-            const t = search.value.toLowerCase();
-            const filtrado = leads.filter(l => l.nome.toLowerCase().includes(t));
-            tabela.innerHTML = "";
-            filtrado.forEach(l => {
-                tabela.innerHTML += `<tr><td>${l.nome}</td><td>${l.email}</td><td>${l.telefone}</td><td>${l.negocio}</td><td>${new Date(l.data).toLocaleDateString()}</td></tr>`;
-            });
+            const termo = document.getElementById("search").value.toLowerCase();
+            
+            if (termo === "") {
+                paginaAtual = 1;
+                renderTabela();
+                return;
+            }
+            
+            const filtrado = leads.filter(l => 
+                l.nome?.toLowerCase().includes(termo) ||
+                l.email?.toLowerCase().includes(termo) ||
+                l.negocio?.toLowerCase().includes(termo) ||
+                l.telefone?.includes(termo)
+            );
+            
+            if (filtrado.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;">Nenhum resultado para "${termo}"</td></tr>`;
+            } else {
+                tabela.innerHTML = filtrado.map(l => `
+                    <tr>
+                        <td><strong>${l.nome}</strong></td>
+                        <td>${l.email}</td>
+                        <td>${l.telefone}</td>
+                        <td>${l.negocio}</td>
+                        <td>${new Date(l.data).toLocaleDateString('pt-BR')}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn copy" onclick="copiar('${l.telefone}')"><i class="fas fa-copy"></i></button>
+                                <button class="action-btn edit" onclick="editar('${l.id}', '${l.nome}')"><i class="fas fa-pen"></i></button>
+                                <button class="action-btn delete" onclick="deletar('${l.id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
         };
 
+        // ========= PAGINAÇÃO =========
+        window.next = () => {
+            if (paginaAtual * porPagina < leads.length) {
+                paginaAtual++;
+                renderTabela();
+            }
+        };
 
-        /* ========= PAGINAÇÃO ========= */
-        window.next = () => { if (paginaAtual * porPagina < leads.length) { paginaAtual++; render(); } };
-        window.prev = () => { if (paginaAtual > 1) { paginaAtual--; render(); } };
+        window.prev = () => {
+            if (paginaAtual > 1) {
+                paginaAtual--;
+                renderTabela();
+            }
+        };
 
-
-        /* ========= CSV ========= */
+        // ========= EXPORTAR CSV =========
         window.exportarCSV = () => {
-            let csv = "Nome,Email,Telefone,Negocio\n";
-            leads.forEach(l => csv += `${l.nome},${l.email},${l.telefone},${l.negocio}\n`);
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(new Blob([csv]));
-            a.download = "leads.csv";
-            a.click();
-        };
-
-
-        /* ========= NOVO USUÁRIO ========= */
-        window.novoUsuario = async () => {
-            const e = prompt("Email:");
-            const s = prompt("Senha:");
-            if (e && s)
-                await createUserWithEmailAndPassword(auth, e, s);
-        };
-
-
-        /* ========= GRÁFICO ========= */
-        function grafico() {
-
-            const dias = {};
-
+            let csv = "Nome,Email,Telefone,Negócio,Data\n";
             leads.forEach(l => {
-                const d = new Date(l.data).toLocaleDateString();
-                dias[d] = (dias[d] || 0) + 1;
+                const data = l.data ? new Date(l.data).toLocaleDateString('pt-BR') : '';
+                csv += `"${l.nome}","${l.email}","${l.telefone}","${l.negocio}","${data}"\n`;
             });
+            
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `leads_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+            
+            mostrarNotificacao("📊 CSV exportado com sucesso!", "success");
+        };
 
-            new Chart(graficoCanvas, {
-                type: "bar",
+        // ========= NOVO USUÁRIO ADMIN =========
+        window.novoUsuario = async () => {
+            const email = prompt("Email do novo administrador:");
+            if (!email) return;
+            
+            const senha = prompt("Senha (mínimo 6 caracteres):");
+            if (!senha || senha.length < 6) {
+                alert("A senha deve ter no mínimo 6 caracteres");
+                return;
+            }
+            
+            try {
+                await createUserWithEmailAndPassword(auth, email, senha);
+                mostrarNotificacao("✅ Novo admin criado!", "success");
+            } catch (error) {
+                mostrarNotificacao("❌ Erro: " + error.message, "error");
+            }
+        };
+
+        // ========= GRÁFICO =========
+        function renderGrafico() {
+            const ctx = document.getElementById('grafico').getContext('2d');
+            
+            // Agrupar por data (últimos 7 dias)
+            const ultimos7Dias = [];
+            const labels = [];
+            const dados = [];
+            
+            for (let i = 6; i >= 0; i--) {
+                const data = new Date();
+                data.setDate(data.getDate() - i);
+                const dataStr = data.toLocaleDateString('pt-BR');
+                labels.push(dataStr);
+                
+                const count = leads.filter(l => {
+                    if (!l.data) return false;
+                    const dataLead = new Date(l.data).toLocaleDateString('pt-BR');
+                    return dataLead === dataStr;
+                }).length;
+                
+                dados.push(count);
+            }
+
+            // Destruir gráfico anterior se existir
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            chartInstance = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: Object.keys(dias),
-                    datasets: [{ data: Object.values(dias) }]
+                    labels: labels,
+                    datasets: [{
+                        label: 'Leads por dia',
+                        data: dados,
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#22c55e',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8',
+                                stepSize: 1
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
                 }
             });
         }
 
-        const graficoCanvas = document.getElementById("grafico");
+        // ========= NOTIFICAÇÃO =========
+        function mostrarNotificacao(msg, tipo) {
+            // Criar elemento de notificação
+            const notificacao = document.createElement('div');
+            notificacao.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#22c55e' : '#ef4444'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-weight: 500;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+            `;
+            notificacao.innerText = msg;
+            
+            document.body.appendChild(notificacao);
+            
+            setTimeout(() => {
+                notificacao.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notificacao.remove(), 300);
+            }, 3000);
+        }
 
+        // Adicionar estilos para notificações
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar com dados de exemplo se necessário
+        window.addEventListener('load', () => {
+            // Pré-preencher email de admin para demonstração
+            if (email) email.value = 'admin@email.com';
+        });
     </script>
-
 </body>
-
 </html>
