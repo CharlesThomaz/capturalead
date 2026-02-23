@@ -4,202 +4,643 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Moderno · Landing Pages & Automação</title>
 
-    <title>Landing Pages & Automação</title>
+    <!-- Fonte Inter (moderna e sofisticada) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap"
+        rel="stylesheet">
 
     <style>
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
         }
 
         body {
-            margin: 0;
-            background: linear-gradient(135deg, #0f172a, #1e293b);
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0f1c, #0f172a);
             color: #fff;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             padding: 20px;
+            line-height: 1.5;
+            opacity: 0;
+            animation: pageFade 0.8s ease forwards;
+        }
+
+        @keyframes pageFade {
+            to {
+                opacity: 1;
+            }
         }
 
         .container {
             width: 100%;
-            max-width: 620px;
-            background: #0b1220;
-            padding: 45px;
-            border-radius: 18px;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, .6);
-            text-align: center;
+            max-width: 1200px;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(34, 197, 94, 0.1);
+            padding: 50px;
+            border-radius: 32px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(34, 197, 94, 0.1) inset;
             position: relative;
+            transition: transform 0.3s ease;
         }
 
-        /* ===== BOTÃO DASHBOARD ===== */
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Dashboard Link */
         .admin-link {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 13px;
+            top: 20px;
+            right: 25px;
+            font-size: 14px;
             color: #94a3b8;
             text-decoration: none;
-            background: #1f2937;
-            padding: 6px 10px;
-            border-radius: 8px;
-            transition: .2s;
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 8px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            z-index: 10;
         }
 
         .admin-link:hover {
-            background: #334155;
-            color: white;
+            background: #22c55e;
+            color: #0f172a;
+            border-color: #22c55e;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px -10px rgba(34, 197, 94, 0.5);
+        }
+
+        /* Conteúdo principal */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        /* Lado esquerdo - Texto e Formulário */
+        .left-side {
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
-            line-height: 1.3;
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .highlight {
             color: #22c55e;
-            font-weight: bold;
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(34, 197, 94, 0.2);
+            border-radius: 4px;
+            z-index: -1;
         }
 
         .subtitle {
             font-size: 18px;
-            color: #cbd5e1;
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
             margin-bottom: 30px;
         }
 
-        .offers {
-            text-align: left;
-            font-size: 18px;
-            line-height: 1.9;
-            margin-bottom: 30px;
+        .offer-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s ease;
+        }
+
+        .offer-item:hover {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.2);
+            transform: translateX(5px);
+        }
+
+        .offer-item span {
+            color: #22c55e;
+            font-weight: 600;
         }
 
         .badge {
-            background: #22c55e;
-            color: #000;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 6px;
-            margin-left: 6px;
-            font-size: 13px;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 11px;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .pricing {
-            background: #111827;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            font-size: 18px;
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(15, 23, 42, 0.5));
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
         .price-main {
-            font-size: 26px;
-            font-weight: bold;
+            font-size: 32px;
+            font-weight: 800;
             color: #22c55e;
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+        }
+
+        .price-main small {
+            font-size: 16px;
+            font-weight: 400;
+            color: #94a3b8;
         }
 
         .price-maintenance {
-            font-size: 18px;
+            font-size: 16px;
             color: #facc15;
             margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .price-maintenance::before {
+            content: '✨';
+            font-size: 14px;
+        }
+
+        /* Formulário */
+        .form-group {
+            position: relative;
+            margin-bottom: 15px;
         }
 
         input {
             width: 100%;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-radius: 10px;
-            border: none;
+            padding: 18px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             font-size: 16px;
-            background: #1f2937;
+            background: rgba(15, 23, 42, 0.6);
             color: #fff;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #22c55e;
+            background: rgba(15, 23, 42, 0.8);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        input::placeholder {
+            color: #475569;
+            font-weight: 300;
         }
 
         button {
             width: 100%;
             padding: 18px;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 18px;
-            font-weight: bold;
-            background: #22c55e;
+            font-weight: 700;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
             cursor: pointer;
-            transition: .3s;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         button:hover {
-            transform: scale(1.03);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 30px -10px rgba(34, 197, 94, 0.4);
         }
 
         .msg {
-            margin-top: 12px;
+            margin-top: 15px;
             font-size: 14px;
             color: #22c55e;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* ===== CARROSSEL MODERNO ===== */
+        .right-side {
+            animation: slideRight 0.8s ease forwards;
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .carousel-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+        }
+
+        .carousel-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e2e8f0;
+        }
+
+        .carousel-title span {
+            background: #22c55e;
+            color: #0f172a;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 20px;
+            border-radius: 0 0 16px 16px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-slide:hover .slide-overlay {
+            transform: translateY(0);
+        }
+
+        .slide-overlay h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .slide-overlay p {
+            font-size: 14px;
+            color: #22c55e;
+        }
+
+        /* Controles do carrossel */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .carousel-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .carousel-btn:hover {
+            background: #22c55e;
+            border-color: #22c55e;
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .dot.active {
+            width: 24px;
+            background: #22c55e;
+        }
+
+        /* Loading shimmer */
+        .shimmer {
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0) 0%,
+                    rgba(255, 255, 255, 0.05) 50%,
+                    rgba(255, 255, 255, 0) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 900px) {
+            .container {
+                padding: 30px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .offers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .admin-link {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .carousel-slide img {
+                height: 200px;
+            }
         }
     </style>
 </head>
 
 <body>
-
     <div class="container">
-
-        <!-- 🔐 BOTÃO ADMIN -->
+        <!-- Dashboard Link -->
         <a href="dashboard.html" class="admin-link">
-            📊 Ver Painel
+            <span>📊</span> Painel Administrativo
         </a>
 
-        <h1>
-            Landing Pages que <span class="highlight">geram clientes</span> todos os dias 🚀
-        </h1>
+        <div class="main-content">
+            <!-- Lado Esquerdo - Conteúdo Original -->
+            <div class="left-side">
+                <h1>
+                    Landing Pages que <span class="highlight">geram clientes</span> todos os dias
+                </h1>
 
-        <p class="subtitle">
-            Automação + Leads + WhatsApp + Firebase em um só pacote
-        </p>
+                <p class="subtitle">
+                    Automação inteligente + Leads qualificados + Integração nativa
+                </p>
 
-        <div class="offers">
-            ✅ Landing Page profissional de alta conversão<br>
-            ✅ Automação Instagram com ManyChat <span class="badge">GRÁTIS</span><br>
-            ✅ Leads salvos no Firebase <span class="badge">GRÁTIS</span><br>
-            ✅ Integração automática com WhatsApp<br>
-            ✅ Entrega rápida
-        </div>
+                <div class="offers-grid">
+                    <div class="offer-item">
+                        <span>✅</span> Landing Page profissional
+                    </div>
+                    <div class="offer-item">
+                        <span>✅</span> Automação ManyChat <span class="badge">grátis</span>
+                    </div>
+                    <div class="offer-item">
+                        <span>✅</span> Leads no Firebase
+                    </div>
+                    <div class="offer-item">
+                        <span>✅</span> WhatsApp integrado
+                    </div>
+                </div>
 
-        <div class="pricing">
-            <div class="price-main">
-                Criação a partir de R$ 297
+                <div class="pricing">
+                    <div class="price-main">
+                        R$ 297 <small>à vista</small>
+                    </div>
+                    <div class="price-maintenance">
+                        Manutenção mensal: R$ 49/mês (hospedagem + suporte)
+                    </div>
+                </div>
+
+                <form id="leadForm">
+                    <div class="form-group">
+                        <input type="text" id="nome" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Seu melhor email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" id="telefone" placeholder="Seu WhatsApp com DDD" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="negocio" placeholder="Nome do seu negócio" required>
+                    </div>
+
+                    <button type="submit" id="submitBtn">
+                        Quero começar agora 🔥
+                    </button>
+
+                    <p id="msg" class="msg"></p>
+                </form>
             </div>
 
-            <div class="price-maintenance">
-                Manutenção mensal: R$ 49/mês
-                (hospedagem + banco + suporte + atualizações)
+            <!-- Lado Direito - Carrossel de Portfólio -->
+            <div class="right-side">
+                <div class="carousel-section">
+                    <div class="carousel-title">
+                        📱 Projetos recentes
+                        <span>destaque</span>
+                    </div>
+
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Slide 1 -->
+                            <div class="carousel-slide">
+                                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop"
+                                    alt="Landpage E-commerce" class="shimmer" onload="this.classList.remove('shimmer')">
+                                <div class="slide-overlay">
+                                    <h3>E-commerce Plus</h3>
+                                    <p>Conversão: +156%</p>
+                                </div>
+                            </div>
+                            <!-- Slide 2 -->
+                            <div class="carousel-slide">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop"
+                                    alt="Landpage Consultoria" class="shimmer"
+                                    onload="this.classList.remove('shimmer')">
+                                <div class="slide-overlay">
+                                    <h3>Consultoria Estratégica</h3>
+                                    <p>Leads: 240/mês</p>
+                                </div>
+                            </div>
+                            <!-- Slide 3 -->
+                            <div class="carousel-slide">
+                                <img src="https://images.unsplash.com/photo-1556155092-490a1ba16284?w=800&auto=format&fit=crop"
+                                    alt="Landpage Automação" class="shimmer" onload="this.classList.remove('shimmer')">
+                                <div class="slide-overlay">
+                                    <h3>Automação Imobiliária</h3>
+                                    <p>Economia: 40h/mês</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="prevBtn" aria-label="Slide anterior">←</button>
+                        <div class="carousel-dots" id="carouselDots">
+                            <button class="dot active"></button>
+                            <button class="dot"></button>
+                            <button class="dot"></button>
+                        </div>
+                        <button class="carousel-btn" id="nextBtn" aria-label="Próximo slide">→</button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <form id="leadForm">
-            <input type="text" id="nome" placeholder="Seu nome" required>
-            <input type="email" id="email" placeholder="Seu email" required>
-            <input type="tel" id="telefone" placeholder="Seu WhatsApp" required>
-            <input type="text" id="negocio" placeholder="Seu negócio" required>
-
-            <button type="submit">
-                Quero começar agora 🔥
-            </button>
-
-            <p id="msg" class="msg"></p>
-        </form>
-
     </div>
 
-
+    <!-- Firebase e Scripts -->
     <script type="module">
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
+        // Config Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyC_FyYXoqHyZoz9HtIx2mLq6ttVyep35-I",
             authDomain: "capturalead-30100.firebaseapp.com",
@@ -209,49 +650,146 @@
             appId: "1:824629681666:web:501eba900b80a3e3ae911b"
         };
 
+        // Init Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
+        // Elementos do Form
         const form = document.getElementById("leadForm");
         const msgEl = document.getElementById("msg");
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const nome = nomeInput.value;
-            const email = emailInput.value;
-            const telefone = telefoneInput.value;
-            const negocio = negocioInput.value;
-
-            msgEl.innerText = "Salvando...";
-
-            await push(ref(db, "leads"), {
-                nome,
-                email,
-                telefone,
-                negocio,
-                data: new Date().toISOString()
-            });
-
-            msgEl.innerText = "Redirecionando para o WhatsApp...";
-
-            const texto = `Olá! Me chamo ${nome} e quero uma landing page + automação para meu negócio: ${negocio}`;
-
-            window.open(
-                `https://wa.me/5531981216718?text=${encodeURIComponent(texto)}`,
-                "_blank"
-            );
-
-            form.reset();
-        });
+        const submitBtn = document.getElementById("submitBtn");
 
         const nomeInput = document.getElementById("nome");
         const emailInput = document.getElementById("email");
         const telefoneInput = document.getElementById("telefone");
         const negocioInput = document.getElementById("negocio");
 
-    </script>
+        // Carrossel
+        const track = document.getElementById('carouselTrack');
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
 
+        let currentIndex = 0;
+        const totalSlides = slides.length;
+
+        // Função atualizar carrossel
+        function updateCarousel(index) {
+            // Loop infinito
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+
+            currentIndex = index;
+
+            // Mover track
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+            // Atualizar dots
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        // Event listeners carrossel
+        if (prevBtn && nextBtn) {
+            prevBtn.addEventListener('click', () => updateCarousel(currentIndex - 1));
+            nextBtn.addEventListener('click', () => updateCarousel(currentIndex + 1));
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => updateCarousel(index));
+            });
+        }
+
+        // Auto-play do carrossel (opcional)
+        let autoPlayInterval;
+
+        function startAutoPlay() {
+            autoPlayInterval = setInterval(() => {
+                updateCarousel(currentIndex + 1);
+            }, 5000);
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayInterval);
+        }
+
+        // Iniciar autoplay quando a página carregar
+        window.addEventListener('load', () => {
+            startAutoPlay();
+
+            // Parar autoplay quando o usuário interagir
+            track.addEventListener('mouseenter', stopAutoPlay);
+            track.addEventListener('mouseleave', startAutoPlay);
+        });
+
+        // Form submit
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const nome = nomeInput.value.trim();
+            const email = emailInput.value.trim();
+            const telefone = telefoneInput.value.trim();
+            const negocio = negocioInput.value.trim();
+
+            if (!nome || !email || !telefone || !negocio) {
+                msgEl.innerText = "Por favor, preencha todos os campos";
+                msgEl.style.color = "#ef4444";
+                return;
+            }
+
+            // Disable button
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = "0.7";
+            msgEl.innerText = "Salvando seu contato...";
+            msgEl.style.color = "#22c55e";
+
+            try {
+                // Salvar no Firebase
+                await push(ref(db, "leads"), {
+                    nome,
+                    email,
+                    telefone,
+                    negocio,
+                    data: new Date().toISOString(),
+                    origem: "landing_page_carrossel"
+                });
+
+                msgEl.innerText = "✓ Redirecionando para o WhatsApp...";
+
+                // Preparar mensagem
+                const texto = `Olá! Me chamo ${nome} e vi seus projetos no carrossel. Quero uma landing page + automação para meu negócio: ${negocio}`;
+
+                // Abrir WhatsApp
+                window.open(
+                    `https://wa.me/5531981216718?text=${encodeURIComponent(texto)}`,
+                    "_blank"
+                );
+
+                // Reset form
+                form.reset();
+
+            } catch (error) {
+                console.error("Erro:", error);
+                msgEl.innerText = "Erro ao salvar. Tente novamente.";
+                msgEl.style.color = "#ef4444";
+            } finally {
+                // Enable button
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = "1";
+            }
+        });
+
+        // Efeito de shimmer nas imagens (remover quando carregadas)
+        document.querySelectorAll('.carousel-slide img').forEach(img => {
+            if (img.complete) {
+                img.classList.remove('shimmer');
+            } else {
+                img.addEventListener('load', () => img.classList.remove('shimmer'));
+                img.addEventListener('error', () => img.classList.remove('shimmer'));
+            }
+        });
+    </script>
 </body>
 
 </html>
